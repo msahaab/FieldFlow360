@@ -28,11 +28,9 @@ from drf_spectacular.views import (
 
 def health_check(request):
     """Health check endpoint for deployment monitoring"""
-    return JsonResponse({
-        "status": "healthy",
-        "service": "fieldflow",
-        "version": "1.0.0"
-    })
+    return JsonResponse(
+        {"status": "healthy", "service": "fieldflow", "version": "1.0.0"}
+    )
 
 
 urlpatterns = [
