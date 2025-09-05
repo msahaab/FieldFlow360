@@ -12,19 +12,32 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Upload code to EC2
+      - name: Prepare target dir
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST_PROD }}
+          username: ${{ secrets.SSH_USER_PROD }}
+          key: ${{ secrets.SSH_KEY_PROD }}
+          script_stop: true
+          script: |
+            set -e
+            sudo mkdir -p /opt/myapp
+            sudo chown -R $(whoami):$(whoami) /opt/myapp
+            ls -ld /opt/myapp || true
+            ls -la /opt/myapp | sed -n '1,50p'
+
+      - name: Upload code (exclude junk, keep .env on server)
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SSH_HOST_PROD }}
           username: ${{ secrets.SSH_USER_PROD }}
           key: ${{ secrets.SSH_KEY_PROD }}
-          source: "."
+          source: "./,!./.git/**,!./.github/**,!./.env,!./.env.dev,!./dev_data/**,__pycache__/**,*.pyc"
           target: "/opt/myapp"
           overwrite: true
-          rm: true
-          exclude: ".git,.github,.venv,__pycache__,*.pyc,.env,.env.dev,dev_data"
+          rm: false 
 
-      - name: Deploy on EC2
+      - name: Deploy containers
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST_PROD }}
@@ -36,3 +49,4 @@ jobs:
             cd /opt/myapp
             docker compose -f docker-compose.prod.yml up -d --build
             docker image prune -f
+            docker compose -f docker-compose.prod.yml ps
