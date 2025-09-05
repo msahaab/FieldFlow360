@@ -1,5 +1,6 @@
 import pytest
 from django.utils import timezone
+from django.db import IntegrityError
 from jobs.models import Job, JobTask, Equipment
 
 
@@ -40,7 +41,7 @@ def test_jobtask_unique_order_constraint(user_factory):
         title="Job with duplicate order", client_name="C", created_by=admin
     )
     JobTask.objects.create(job=job, order=1, title="Step 1")
-    with pytest.raises(Exception):
+    with pytest.raises(IntegrityError):
         JobTask.objects.create(job=job, order=1, title="Step 2")
 
 
