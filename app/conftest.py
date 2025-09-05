@@ -21,7 +21,7 @@ def user_factory(db):
             "email": f"user{count}@example.com",
             "password": "password123",
             "name": f"User {count}",
-            "role": "SalesAgent",  # default role
+            "role": "SalesAgent",
         }
         defaults.update(kwargs)
         user = User.objects.create_user(
