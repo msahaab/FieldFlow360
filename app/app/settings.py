@@ -144,7 +144,7 @@ SPECTACULAR_SETTINGS = {
     "COMPONENT_SPLIT_REQUEST": True,
 }
 
-from celery.schedules import crontab #noqa
+from celery.schedules import crontab  # noqa
 
 CELERY_BEAT_SCHEDULE = {
     "update-overdue-jobs-every-10min": {
