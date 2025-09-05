@@ -1,0 +1,8 @@
+Django
+gunicorn
+whitenoise
+celery
+djangorestframework
+pytest
+drf-spectacular
+flake8
