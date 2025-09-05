@@ -19,7 +19,7 @@ git clone https://github.com/msahaab/FieldFlowAssessment.git
    ```bash
    # from repo root after cloning
    cp .env.example .env
-````
+   ```
 
 2. **Start dev**
 
